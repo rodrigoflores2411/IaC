@@ -1,4 +1,3 @@
-AGUANTE PROFE ESTA QUE SE SUBE AUN NO REVISE
 
 Integrantes del Grupo 6
 Rodrigo Flores Alvarez
