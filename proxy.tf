@@ -6,7 +6,6 @@ resource "docker_container" "proxy" {
     internal = 80
     external = 1000
   }
-
   networks_advanced {
     name = docker_network.app_net.name
   }
