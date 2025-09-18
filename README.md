@@ -1,66 +1,80 @@
-#Hola
-Mi grupo es el 6
-    -Rodrigo Flores Alvarez
-    -Julio Cedamanos Guevara
-    -Bryam Gutierrez Rubio
-    -Luis Ibañez Herrera
-Se despliegan los siguientes servicios:
+Integrantes del Grupo 6
+Rodrigo Flores Alvarez
 
-3 aplicaciones basadas en Nginx (app1, app2, app3).
+Julio Cedamanos Guevara
 
-Una base de datos PostgreSQL.
+Bryam Gutierrez Rubio
 
-Un sistema de caché Redis.
+Luis Ibañez Herrera
 
-Un servicio de monitorización con Grafana.
+Descripción
+Este proyecto implementa una arquitectura que despliega los siguientes servicios:
 
-Estructura del proyecto:
+3 aplicaciones basadas en Nginx (app1, app2, app3)
 
-├── containers.tf      # Definición de los contenedores (apps, grafana, redis, postgres)
-├── main.tf            # Configuración principal y provider
-├── nginx.tf           # Configuración específica para las apps Nginx
-├── redes.tf           # Definición de las redes de Docker (app_net, persistence_net, monitor_net)
-├── variables.tf       # Declaración de variables
-├── terraform.tfvars   # Valores de las variables (credenciales, puertos, etc.)
-├── terraform.tfstate  # Estado actual de la infraestructura (NO editar manualmente)
-└── terraform.tfstate.d/ # Directorio con estados parciales
+Una base de datos PostgreSQL
 
--Arquitectura:
+Un sistema de caché Redis
 
-Los servicios se agrupan en distintas redes de Docker:
+Un servicio de monitorización con Grafana
 
-app_net → Conexión de las aplicaciones Nginx.
+Estructura del Proyecto
+text
+├── containers.tf          # Definición de contenedores (apps, grafana, redis, postgres)
+├── main.tf               # Configuración principal y provider
+├── nginx.tf              # Configuración específica para apps Nginx
+├── redes.tf              # Definición de redes Docker
+├── variables.tf          # Declaración de variables
+├── terraform.tfvars      # Valores de variables (credenciales, puertos, etc.)
+├── terraform.tfstate     # Estado de infraestructura (NO editar)
+└── terraform.tfstate.d/  # Estados parciales
+Arquitectura
+Los servicios se agrupan en redes Docker específicas:
 
-persistence_net → Conexión de Redis y PostgreSQL.
+app_net: Conexión de aplicaciones Nginx
 
-monitor_net → Conexión de Grafana y monitorización.
+persistence_net: Conexión de Redis y PostgreSQL
 
-Flujo de comunicación:
+monitor_net: Conexión de Grafana y monitorización
 
-Usuarios → Nginx apps
+Flujo de Comunicación
+Usuarios → Aplicaciones Nginx
 
-Apps → Redis/Postgres (persistencia y caché)
+Aplicaciones → Redis/PostgreSQL 
+Aplicaciones → Grafana 
 
-Apps → Grafana (exposición de métricas)
+Requisitos Previos
+Terraform instalado
 
-Grafana → Monitorización interna
--Requisitos previos:
-Terraform
-Docker
- instalado y corriendo
+Docker instalado y en ejecución
+
 Acceso a internet para descargar imágenes de Docker Hub
 
--Despliegue:
+Despliegue
 Inicializar Terraform:
-````````````
-terraform init
-````````````
-Revisar el plan de ejecución:
-````````````
-terraform plan
-````````````
-Aplicar la configuración:
-````````````
-terraform apply 
-````````````
 
+bash
+terraform init
+Revisar el plan de ejecución:
+
+bash
+terraform plan
+Aplicar la configuración:
+
+bash
+terraform apply
+Verificación
+Acceder a los servicios:
+
+Aplicaciones Nginx: puertos configurados en terraform.tfvars
+
+Grafana: puerto 3000 (por defecto)
+
+Verificar contenedores en ejecución:
+
+bash
+docker ps
+Verificar redes Docker creadas:
+
+bash
+docker network ls
