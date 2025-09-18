@@ -1,0 +1,71 @@
+- name: Configurar Nginx proxy
+  hosts: localhost
+  gather_facts: false
+  vars:
+    project_root: "{{ playbook_dir }}/.."
+    nginx_conf_host: "{{ project_root }}/host_volumes/nginx"
+    web_root_host: "{{ project_root }}/host_volumes/web"
+    nginx_container: "nginx-proxy"
+
+  tasks:
+    - name: Crear directorios para volúmenes
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      loop:
+        - "{{ nginx_conf_host }}"
+        - "{{ web_root_host }}/app1"
+        - "{{ web_root_host }}/app2"
+        - "{{ web_root_host }}/app3"
+
+    - name: Copiar index de app1
+      copy:
+        src: "{{ project_root }}/web/app1/index.html"
+        dest: "{{ web_root_host }}/app1/index.html"
+        mode: 0644
+
+    - name: Copiar index de app2
+      copy:
+        src: "{{ project_root }}/web/app2/index.html"
+        dest: "{{ web_root_host }}/app2/index.html"
+        mode: 0644
+
+    - name: Copiar index de app3
+      copy:
+        src: "{{ project_root }}/web/app3/index.html"
+        dest: "{{ web_root_host }}/app3/index.html"
+        mode: 0644
+
+    - name: Copiar configuración Nginx para app1
+      copy:
+        src: "{{ project_root }}/files/nginx/nginxapp1.config"
+        dest: "{{ nginx_conf_host }}/nginxapp1.config"
+        mode: 0644
+
+    - name: Copiar configuración Nginx para app2
+      copy:
+        src: "{{ project_root }}/files/nginx/nginxapp2.config"
+        dest: "{{ nginx_conf_host }}/nginxapp2.config"
+        mode: 0644
+
+    - name: Copiar configuración Nginx para app3
+      copy:
+        src: "{{ project_root }}/files/nginx/nginxapp3.config"
+        dest: "{{ nginx_conf_host }}/nginxapp3.config"
+        mode: 0644
+
+    - name: Copiar configuración Nginx principal (proxy)
+      copy:
+        src: "{{ project_root }}/files/nginx/nginx.config"
+        dest: "{{ nginx_conf_host }}/nginx.config"
+        mode: 0644
+
+    - name: Intentar recargar Nginx
+      command: "docker exec {{ nginx_container }} nginx -s reload"
+      register: reload_result
+      ignore_errors: true
+
+    - name: Reiniciar contenedor si recarga falla
+      command: "docker restart {{ nginx_container }}"
+      when: reload_result.rc != 0
