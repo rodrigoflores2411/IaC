@@ -1,5 +1,4 @@
 resource "docker_container" "app1" {
-
   name  = "nginx_01-${terraform.workspace}"
   image = "nginx:stable-perl"
 
