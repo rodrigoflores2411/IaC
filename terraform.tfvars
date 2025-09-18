@@ -16,7 +16,6 @@ nginx_external_port_3 = {
     qa  = 4002
     prod = 83
 }
-
 grafana_external_port = {
     default = 4000
     dev = 4000
